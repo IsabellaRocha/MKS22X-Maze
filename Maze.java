@@ -9,7 +9,7 @@ public class Maze {
 
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
-    makeArray("Maze1.txt");
+    makeArray(fileName);
     int[][] poss2 = {{0, 1},
                     {1, 0},
                     {0, -1},
@@ -97,14 +97,15 @@ public class Maze {
       wait(20);
     }
     maze[row][col] = '@';
-    int ans;
+    int ans = 0;
     for (int idx = 0; idx < 4; idx++) {
       if (maze[row + poss[idx][0]][col + poss[idx][1]] == ' ') {
-        ans = solve(row + poss[idx][0], col + poss[idx][1]);
+        ans += solve(row + poss[idx][0], col + poss[idx][1]);
         if (ans != -1) {
           return ans + 1;
         }
-      } else if (row + poss[idx][0] == endR && col + poss[idx][1] == endC) {
+      }
+      if (row + poss[idx][0] == endR && col + poss[idx][1] == endC) {
         return 1;
       }
     }
@@ -114,8 +115,17 @@ public class Maze {
   public static void main(String args[]) {
     try {
       Maze test = new Maze("Maze1.txt");
-      test.solve();
+      Maze test1 = new Maze("data1.dat");
+      Maze test2 = new Maze("data2.dat");
+      Maze test3 = new Maze("data3.dat");
+      System.out.println(test.solve());
+      System.out.println(test1.solve());
+      System.out.println(test2.solve());
+      System.out.println(test3.solve());
       System.out.println(test);
+      System.out.println(test1);
+      System.out.println(test2);
+      System.out.println(test3);
     }
     catch (FileNotFoundException e) {
       System.out.println("File not found");
