@@ -1,39 +1,52 @@
 import java.util.*;
 import java.io.*;
 public class Maze {
-  public static String readFile(String x) throws FileNotFoundException{
+  private char[][] maze;
+  private String str;
+  public void readFile(String x) throws FileNotFoundException{
     File text = new File(x);
-    Scanner Maze = new Scanner(text);
-    String output = "";
-    while (Maze.hasNextLine()) {
-      output += Maze.nextLine() + "\n";
+    Scanner in = new Scanner(text);
+    str = "";
+    while (in.hasNextLine()) {
+      str += in.nextLine() + "\n";
     }
-    return output;
   }
-  public static char[][] readFileArray(String x) throws FileNotFoundException{
+  public void makeArray(String x) throws FileNotFoundException{
     File text = new File(x);
-    Scanner Maze = new Scanner(text);
+    Scanner in = new Scanner(text);
     int r = 0;
     int c = 0;
-    while (Maze.hasNextLine()) {
+    while (in.hasNextLine()) {
       r++;
-      String line = Maze.nextLine();
+      String line = in.nextLine();
       c = line.length();
     }
-    char[][] output = new char[r][c];
-    Maze = new Scanner(text);
-    while (Maze.hasNextLine()) {
-      int i = 0;
-      for (int idx = 0; idx < Maze.nextLine().length(); idx++) {
-        output[i][idx] = Maze.nextLine().charAt(idx);
+    maze = new char[r][c];
+    in = new Scanner(text);
+    for (int i = 0; i < r; i++) {
+      String line = in.nextLine();
+      for (int idx = 0; idx < line.length(); idx++) {
+        maze[i][idx] = line.charAt(idx);
       }
-      i++;
+    }
+  }
+  public String toString() {
+    String output = "";
+    for (int idx = 0; idx < maze.length; idx++) {
+      output += "\n";
+      for (int x = 0; x < maze[idx].length; x++) {
+        output += maze[idx][x];
+      }
     }
     return output;
   }
   public static void main(String args[]) {
     try {
-      System.out.println(readFile("Maze1.txt"));
+      Maze m = new Maze();
+      m.readFile("Maze1.txt");
+      System.out.println(m.str);
+      m.makeArray("Maze1.txt");
+      System.out.println(m);
     }
     catch (FileNotFoundException e) {
       System.out.println("File does not exist");
