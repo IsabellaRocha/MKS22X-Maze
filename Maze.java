@@ -97,10 +97,10 @@ public class Maze {
       wait(20);
     }
     maze[row][col] = '@';
-    int ans = 0;
+    int ans;
     for (int idx = 0; idx < 4; idx++) {
       if (maze[row + poss[idx][0]][col + poss[idx][1]] == ' ') {
-        ans += solve(row + poss[idx][0], col + poss[idx][1]);
+        ans = solve(row + poss[idx][0], col + poss[idx][1]);
         if (ans != -1) {
           return ans + 1;
         }
