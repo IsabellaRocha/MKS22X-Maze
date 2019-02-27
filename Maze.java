@@ -2,15 +2,39 @@ import java.util.*;
 import java.io.*;
 public class Maze {
   private char[][] maze;
-  private String str;
-  public void readFile(String x) throws FileNotFoundException{
-    File text = new File(x);
-    Scanner in = new Scanner(text);
-    str = "";
-    while (in.hasNextLine()) {
-      str += in.nextLine() + "\n";
+  public boolean animate;
+
+  public Maze(String fileName) throws FileNotFoundException{
+    animate = false;
+    makeArray("Maze1.txt");
+    boolean checkS = false;
+    boolean checkE = false;
+    for (int idx = 0; idx < maze.length; idx++) {
+      for (int x = 0; x < maze[idx].length; x++) {
+        if (maze[idx][x] == 'S') checkS = true;
+        if (maze[idx][x] == 'E') checkE = true;
+      }
+    }
+    if (!checkS || !checkE) {
+      throw new IllegalStateException();
     }
   }
+  private void wait(int millis){
+         try {
+             Thread.sleep(millis);
+         }
+         catch (InterruptedException e) {
+         }
+     }
+
+    public void setAnimate(boolean b){
+        animate = b;
+    }
+
+    public void clearTerminal(){
+        //erase terminal, go to top left of screen.
+        System.out.println("\033[2J\033[1;1H");
+    }
   public void makeArray(String x) throws FileNotFoundException{
     File text = new File(x);
     Scanner in = new Scanner(text);
@@ -40,16 +64,27 @@ public class Maze {
     }
     return output;
   }
+  public int solve() {
+    int r = 0; int c = 0;
+    for (int idx = 0; idx < maze.length; idx++) {
+      for (int x = 0; x < maze[idx].length; x++) {
+        if (maze[idx][x] == 'S') {
+          r = idx;
+          c = x;
+          maze[idx][x] = '@';
+        }
+      }
+    }
+    return solve(r, c);
+  }
+  private int solve(int row, int col) {
+    if (animate) {
+      clearTerminal();
+      System.out.println(this);
+      wait(20);
+    }
+    return -1;
+  }
   public static void main(String args[]) {
-    try {
-      Maze m = new Maze();
-      m.readFile("Maze1.txt");
-      System.out.println(m.str);
-      m.makeArray("Maze1.txt");
-      System.out.println(m);
-    }
-    catch (FileNotFoundException e) {
-      System.out.println("File does not exist");
-    }
   }
 }
