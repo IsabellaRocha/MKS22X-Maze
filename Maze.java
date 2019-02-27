@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 public class Maze {
   private char[][] maze;
-  public boolean animate;
+  private boolean animate;
 
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
@@ -75,13 +75,31 @@ public class Maze {
         }
       }
     }
-    return solve(r, c);
+    return solve(r, c, 0);
   }
-  private int solve(int row, int col) {
+  private int solve(int row, int col, int n) {
     if (animate) {
       clearTerminal();
       System.out.println(this);
       wait(20);
+    }
+    if (maze[row][col] == 'E') {
+      return n;
+    }
+    if (maze[row][col] == ' ') {
+      maze[row][col] = '@';
+      if (maze[row + 1][col] == ' ') {
+        return solve(row + 1, col, n + 1);
+      }
+      if (maze[row - 1][col] == ' ') {
+        return solve(row - 1, col, n + 1);
+      }
+      if (maze[row][col + 1] == ' ') {
+        return solve(row, col + 1, n + 1);
+      }
+      if (maze[row][col - 1] == ' ') {
+        return solve(row, col - 1, n + 1);
+      }
     }
     return -1;
   }
