@@ -3,16 +3,28 @@ import java.io.*;
 public class Maze {
   private char[][] maze;
   private boolean animate;
+  private int[][] poss;
+  private int endR;
+  private int endC;
 
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
     makeArray("Maze1.txt");
+    int[][] poss2 = {{0, 1},
+                    {1, 0},
+                    {0, -1},
+                    {-1, 0}};
+    poss = poss2;
     boolean checkS = false;
     boolean checkE = false;
     for (int idx = 0; idx < maze.length; idx++) {
       for (int x = 0; x < maze[idx].length; x++) {
         if (maze[idx][x] == 'S') checkS = true;
-        if (maze[idx][x] == 'E') checkE = true;
+        if (maze[idx][x] == 'E') {
+          checkE = true;
+          endR = idx;
+          endC = x;
+        }
       }
     }
     if (!checkS || !checkE) {
@@ -72,37 +84,41 @@ public class Maze {
           r = idx;
           c = x;
           maze[idx][x] = '@';
+          break;
         }
       }
     }
-    return solve(r, c, 0);
+    return solve(r, c);
   }
-  private int solve(int row, int col, int n) {
+  private int solve(int row, int col) {
     if (animate) {
       clearTerminal();
       System.out.println(this);
       wait(20);
     }
-    if (maze[row][col] == 'E') {
-      return n;
-    }
-    if (maze[row][col] == ' ') {
-      maze[row][col] = '@';
-      if (maze[row + 1][col] == ' ') {
-        return solve(row + 1, col, n + 1);
-      }
-      if (maze[row - 1][col] == ' ') {
-        return solve(row - 1, col, n + 1);
-      }
-      if (maze[row][col + 1] == ' ') {
-        return solve(row, col + 1, n + 1);
-      }
-      if (maze[row][col - 1] == ' ') {
-        return solve(row, col - 1, n + 1);
+    maze[row][col] = '@';
+    int ans;
+    for (int idx = 0; idx < 4; idx++) {
+      if (maze[row + poss[idx][0]][col + poss[idx][1]] == ' ') {
+        ans = solve(row + poss[idx][0], col + poss[idx][1]);
+        if (ans != -1) {
+          return ans + 1;
+        }
+      } else if (row + poss[idx][0] == endR && col + poss[idx][1] == endC) {
+        return 1;
       }
     }
+    maze[row][col] = '.';
     return -1;
   }
   public static void main(String args[]) {
+    try {
+      Maze test = new Maze("Maze1.txt");
+      test.solve();
+      System.out.println(test);
+    }
+    catch (FileNotFoundException e) {
+      System.out.println("File not found");
+    }
   }
 }
