@@ -4,8 +4,6 @@ public class Maze {
   private char[][] maze;
   private boolean animate;
   private int[][] poss;
-  private int endR;
-  private int endC;
 
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
@@ -20,11 +18,7 @@ public class Maze {
     for (int idx = 0; idx < maze.length; idx++) {
       for (int x = 0; x < maze[idx].length; x++) {
         if (maze[idx][x] == 'S') checkS = true;
-        if (maze[idx][x] == 'E') {
-          checkE = true;
-          endR = idx;
-          endC = x;
-        }
+        if (maze[idx][x] == 'E') checkE = true;
       }
     }
     if (!checkS || !checkE) {
@@ -47,7 +41,7 @@ public class Maze {
         //erase terminal, go to top left of screen.
         System.out.println("\033[2J\033[1;1H");
     }
-  public void makeArray(String x) throws FileNotFoundException{
+  private void makeArray(String x) throws FileNotFoundException{
     File text = new File(x);
     Scanner in = new Scanner(text);
     int r = 0;
@@ -94,16 +88,16 @@ public class Maze {
     if (animate) {
       clearTerminal();
       System.out.println(this);
-      wait(20);
+      wait(50);
     }
     if (maze[row][col] == ' ') {
       maze[row][col] = '@';
       for (int idx = 0; idx < 4; idx++) {
         if (maze[row + poss[idx][0]][col + poss[idx][1]] == 'E') {
-          return moveNumber;
+          return moveNumber + 1;
         }
-        if(solve(row + poss[idx][0], col + poss[idx][1], moveNumber + 1) != -1) {
-          return 1;
+        if (solve(row + poss[idx][0], col + poss[idx][1], moveNumber + 1) != -1) {
+          return moveNumber;
         }
       }
       maze[row][col] = '.';
@@ -112,12 +106,11 @@ public class Maze {
   }
   public static void main(String args[]) {
     try {
-
       Maze test = new Maze("Maze1.txt");
       Maze test1 = new Maze("data1.dat");
       Maze test2 = new Maze("data2.dat");
       Maze test3 = new Maze("data3.dat");
-      test.setAnimate(true);
+  //    test2.setAnimate(true);
       System.out.println(test.solve());
       System.out.println(test1.solve());
       System.out.println(test2.solve());
