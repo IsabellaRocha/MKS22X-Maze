@@ -83,41 +83,41 @@ public class Maze {
         if (maze[idx][x] == 'S') {
           r = idx;
           c = x;
-          maze[idx][x] = '@';
+          maze[idx][x] = ' ';
           break;
         }
       }
     }
-    return solve(r, c);
+    return solve(r, c, 0);
   }
-  private int solve(int row, int col) {
+  private int solve(int row, int col, int moveNumber) {
     if (animate) {
       clearTerminal();
       System.out.println(this);
       wait(20);
     }
-    maze[row][col] = '@';
-    int ans;
-    for (int idx = 0; idx < 4; idx++) {
-      if (maze[row + poss[idx][0]][col + poss[idx][1]] == ' ') {
-        ans = solve(row + poss[idx][0], col + poss[idx][1]);
-        if (ans != -1) {
-          return ans + 1;
+    if (maze[row][col] == ' ') {
+      maze[row][col] = '@';
+      for (int idx = 0; idx < 4; idx++) {
+        if (maze[row + poss[idx][0]][col + poss[idx][1]] == 'E') {
+          return moveNumber;
+        }
+        if(solve(row + poss[idx][0], col + poss[idx][1], moveNumber + 1) != -1) {
+          return 1;
         }
       }
-      if (row + poss[idx][0] == endR && col + poss[idx][1] == endC) {
-        return 1;
-      }
+      maze[row][col] = '.';
     }
-    maze[row][col] = '.';
     return -1;
   }
   public static void main(String args[]) {
     try {
+
       Maze test = new Maze("Maze1.txt");
       Maze test1 = new Maze("data1.dat");
       Maze test2 = new Maze("data2.dat");
       Maze test3 = new Maze("data3.dat");
+      test.setAnimate(true);
       System.out.println(test.solve());
       System.out.println(test1.solve());
       System.out.println(test2.solve());
