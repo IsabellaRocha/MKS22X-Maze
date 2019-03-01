@@ -4,9 +4,11 @@ public class Maze {
   private char[][] maze;
   private boolean animate;
   private int[][] poss;
+  private int moves;
 
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
+    moves = 0;
     makeArray(fileName);
     int[][] poss2 = {{0, 1},
                     {1, 0},
@@ -82,9 +84,9 @@ public class Maze {
         }
       }
     }
-    return solve(r, c, 0);
+    return solve(r, c);
   }
-  private int solve(int row, int col, int moveNumber) {
+  private int solve(int row, int col) {
     if (animate) {
       clearTerminal();
       System.out.println(this);
@@ -92,26 +94,19 @@ public class Maze {
     }
     if (maze[row][col] == ' ') {
       maze[row][col] = '@';
+      moves++;
       for (int idx = 0; idx < 4; idx++) {
         if (maze[row + poss[idx][0]][col + poss[idx][1]] == 'E') {
-          return countMoves();
+          return 1;
         }
-        if (solve(row + poss[idx][0], col + poss[idx][1], moveNumber + 1) != -1) {
-          return countMoves();
+        if (solve(row + poss[idx][0], col + poss[idx][1]) != -1) {
+          return moves;
         }
       }
       maze[row][col] = '.';
+      moves--;
     }
     return -1;
-  }
-  private int countMoves() {
-    int count = 0;
-    for (int idx = 0; idx < maze.length; idx++) {
-      for (int x = 0; x < maze[idx].length; x++) {
-        if (maze[idx][x] == '@') count++;
-      }
-    }
-    return count;
   }
   public static void main(String args[]) {
     try {
