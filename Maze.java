@@ -9,23 +9,12 @@ public class Maze {
   public Maze(String fileName) throws FileNotFoundException{
     animate = false;
     moves = 0;
-    makeArray(fileName);
+    makeMaze(fileName);
     int[][] poss2 = {{0, 1},
                     {1, 0},
                     {0, -1},
                     {-1, 0}};
     poss = poss2;
-    int checkS = 0;
-    int checkE = 0;
-    for (int idx = 0; idx < maze.length; idx++) {
-      for (int x = 0; x < maze[idx].length; x++) {
-        if (maze[idx][x] == 'S') checkS++;
-        if (maze[idx][x] == 'E') checkE++;
-      }
-    }
-    if (checkS != 1 || checkE != 1) {
-      throw new IllegalStateException();
-    }
   }
   private void wait(int millis){
          try {
@@ -43,7 +32,7 @@ public class Maze {
         //erase terminal, go to top left of screen.
         System.out.println("\033[2J\033[1;1H");
     }
-  private void makeArray(String x) throws FileNotFoundException{
+  private void makeMaze(String x) throws FileNotFoundException{
     File text = new File(x);
     Scanner in = new Scanner(text);
     int r = 0;
@@ -55,11 +44,18 @@ public class Maze {
     }
     maze = new char[r][c];
     in = new Scanner(text);
+    int checkS = 0;
+    int checkE = 0;
     for (int i = 0; i < r; i++) {
       String line = in.nextLine();
       for (int idx = 0; idx < line.length(); idx++) {
         maze[i][idx] = line.charAt(idx);
+        if (maze[i][idx] == 'S') checkS++;
+        if (maze[i][idx] == 'E') checkE++;
       }
+    }
+    if (checkS != 1 || checkE != 1) {
+      throw new IllegalStateException();
     }
   }
   public String toString() {
