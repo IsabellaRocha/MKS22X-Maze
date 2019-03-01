@@ -94,15 +94,24 @@ public class Maze {
       maze[row][col] = '@';
       for (int idx = 0; idx < 4; idx++) {
         if (maze[row + poss[idx][0]][col + poss[idx][1]] == 'E') {
-          return moveNumber + 1;
+          return countMoves();
         }
         if (solve(row + poss[idx][0], col + poss[idx][1], moveNumber + 1) != -1) {
-          return moveNumber;
+          return countMoves();
         }
       }
       maze[row][col] = '.';
     }
     return -1;
+  }
+  private int countMoves() {
+    int count = 0;
+    for (int idx = 0; idx < maze.length; idx++) {
+      for (int x = 0; x < maze[idx].length; x++) {
+        if (maze[idx][x] == '@') count++;
+      }
+    }
+    return count;
   }
   public static void main(String args[]) {
     try {
