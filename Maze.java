@@ -15,15 +15,15 @@ public class Maze {
                     {0, -1},
                     {-1, 0}};
     poss = poss2;
-    boolean checkS = false;
-    boolean checkE = false;
+    int checkS = 0;
+    int checkE = 0;
     for (int idx = 0; idx < maze.length; idx++) {
       for (int x = 0; x < maze[idx].length; x++) {
-        if (maze[idx][x] == 'S') checkS = true;
-        if (maze[idx][x] == 'E') checkE = true;
+        if (maze[idx][x] == 'S') checkS++;
+        if (maze[idx][x] == 'E') checkE++;
       }
     }
-    if (!checkS || !checkE) {
+    if (checkS != 1 || checkE != 1) {
       throw new IllegalStateException();
     }
   }
@@ -114,7 +114,7 @@ public class Maze {
       Maze test1 = new Maze("data1.dat");
       Maze test2 = new Maze("data2.dat");
       Maze test3 = new Maze("data3.dat");
-  //    test2.setAnimate(true);
+      test2.setAnimate(true);
       System.out.println(test.solve());
       System.out.println(test1.solve());
       System.out.println(test2.solve());
