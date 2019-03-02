@@ -88,13 +88,13 @@ public class Maze {
       System.out.println(this);
       wait(50);
     }
+    if (maze[row][col]== 'E') {
+      return 1;
+    }
     if (maze[row][col] == ' ') {
       maze[row][col] = '@';
       moves++;
       for (int idx = 0; idx < 4; idx++) {
-        if (maze[row + poss[idx][0]][col + poss[idx][1]] == 'E') {
-          return 1;
-        }
         if (solve(row + poss[idx][0], col + poss[idx][1]) != -1) {
           return moves;
         }
@@ -110,7 +110,7 @@ public class Maze {
       Maze test1 = new Maze("data1.dat");
       Maze test2 = new Maze("data2.dat");
       Maze test3 = new Maze("data3.dat");
-      test2.setAnimate(true);
+  //    test2.setAnimate(true);
       System.out.println(test.solve());
       System.out.println(test1.solve());
       System.out.println(test2.solve());
